@@ -42,14 +42,14 @@ class Vim74 < Formula
 
     opts = []
     opts += LANGUAGES_OPTIONAL.map do |language|
-      "--enable-#{language}interp" if build.with? language
+      "--enable-#{language}interp=dynamic" if build.with? language
     end
     opts += LANGUAGES_DEFAULT.map do |language|
-      "--enable-#{language}interp" if build.with? language
+      "--enable-#{language}interp=dynamic" if build.with? language
     end
 
     if build.with? "luajit"
-      opts << "--enable-luainterp" if build.without? "lua"
+      opts << "--enable-luainterp=dynamic" if build.without? "lua"
       opts << "--with-luajit"
     end
 
