@@ -83,6 +83,19 @@ class Vim74 < Formula
     # Replace `Cellar' paths by `opt_prefix' paths in config.mk
     inreplace "src/auto/config.mk" do |s|
       s.gsub! %r|#{HOMEBREW_CELLAR}/(.+?)/(?:.+?)/|, "#{HOMEBREW_PREFIX}/opt/\\1/"
+
+      # Require Python's dynamic library, and needs to be built as a framework.
+      # Help vim find Python's dynamic library as absolute path.
+      if build.with? "python"
+        s.gsub! /-DDYNAMIC_PYTHON_DLL=\\".*?\\"/,
+          %(-DDYNAMIC_PYTHON_DLL=\'\"#{python_framework_path("python")}/Python\"\')
+      end
+      if build.with? "python3"
+        s.gsub! /-DDYNAMIC_PYTHON3_DLL=\\".*?\\"/,
+          %(-DDYNAMIC_PYTHON3_DLL=\'\"#{python_framework_path("python3")}/Python\"\')
+      end
+
+      true
     end
 
     system "make"
@@ -90,6 +103,11 @@ class Vim74 < Formula
     # statically-linked interpreters like ruby
     # http://code.google.com/p/vim/issues/detail?id=114&thanks=114&ts=1361483471
     system "make", "install", "prefix=#{prefix}", "STRIP=true"
+  end
+
+  def python_framework_path(pyexe)
+    `#{pyexe} -c "import sys; print(sys.prefix)"`.chomp.
+      gsub(%r|#{HOMEBREW_CELLAR}/(?:.+?)/(?:.+?)/|, "#{HOMEBREW_PREFIX}/")
   end
 
   test do
