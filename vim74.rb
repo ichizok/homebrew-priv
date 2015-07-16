@@ -75,21 +75,14 @@ class Vim74 < Formula
                           "--mandir=#{man}",
                           "--enable-multibyte",
                           "--with-tlib=ncurses",
-                          "--enable-cscope",
                           "--with-features=huge",
                           "--with-compiledby=Homebrew",
                           "--enable-fail-if-missing",
                           *opts
 
-    # Require Python's dynamic library, and needs to be built as a framework.
-    if build.with?("python") && build.with?("python3")
-      py_prefix = `python -c "import sys; print(sys.prefix)"`.chomp
-      py3_prefix = `python3 -c "import sys; print(sys.prefix)"`.chomp
-      # Help vim find Python's dynamic library as absolute path.
-      inreplace "src/auto/config.mk" do |s|
-        s.gsub! /-DDYNAMIC_PYTHON_DLL=\\".*\\"/, %(-DDYNAMIC_PYTHON_DLL=\'\"#{py_prefix}/Python\"\')
-        s.gsub! /-DDYNAMIC_PYTHON3_DLL=\\".*\\"/, %(-DDYNAMIC_PYTHON3_DLL=\'\"#{py3_prefix}/Python\"\')
-      end
+    # Replace `Cellar' paths by `opt_prefix' paths in config.mk
+    inreplace "src/auto/config.mk" do |s|
+      s.gsub! %r|#{HOMEBREW_CELLAR}/(.+?)/(?:.+?)/|, "#{HOMEBREW_PREFIX}/opt/\\1/"
     end
 
     system "make"
