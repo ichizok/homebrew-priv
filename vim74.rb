@@ -1,4 +1,5 @@
 class Vim74 < Formula
+  desc "Vi \"workalike\" with many additional features"
   homepage "http://www.vim.org/"
   # Get stable versions from hg repo instead of downloading an increasing
   # number of separate patches.
@@ -14,8 +15,8 @@ class Vim74 < Formula
   option "without-nls", "Build vim without National Language Support (translated messages, keymaps)"
   option "with-client-server", "Enable client/server mode"
 
-  LANGUAGES_OPTIONAL = %w[lua mzscheme perl python3 tcl]
-  LANGUAGES_DEFAULT  = %w[ruby python]
+  LANGUAGES_OPTIONAL = %w[mzscheme perl python3 ruby tcl]
+  LANGUAGES_DEFAULT  = %w[lua python]
 
   LANGUAGES_OPTIONAL.each do |language|
     option "with-#{language}", "Build vim with #{language} support"
@@ -28,7 +29,7 @@ class Vim74 < Formula
   depends_on :python3 => :optional
   depends_on "lua" => :optional
   depends_on "luajit" => :optional
-  depends_on "gtk+" if build.with? "client-server"
+  depends_on :x11 if build.with? "client-server"
 
   conflicts_with "ex-vi",
     :because => "vim and ex-vi both install bin/ex and bin/view"
@@ -41,25 +42,23 @@ class Vim74 < Formula
     ENV.delete("PYTHONPATH")
 
     opts = []
-    opts += LANGUAGES_OPTIONAL.map do |language|
-      "--enable-#{language}interp=dynamic" if build.with? language
+
+    (LANGUAGES_OPTIONAL + LANGUAGES_DEFAULT).each do |language|
+      opts << "--enable-#{language}interp" if build.with? language
     end
-    opts += LANGUAGES_DEFAULT.map do |language|
-      "--enable-#{language}interp=dynamic" if build.with? language
+
+    opts << "--disable-nls" if build.without? "nls"
+    opts << "--enable-gui=no"
+
+    if build.with? "client-server"
+      opts << "--with-x"
+    else
+      opts << "--without-x"
     end
 
     if build.with? "luajit"
       opts << "--enable-luainterp=dynamic" if build.without? "lua"
       opts << "--with-luajit"
-    end
-
-    opts << "--disable-nls" if build.without? "nls"
-
-    if build.with? "client-server"
-      opts << "--enable-gui=gtk2"
-    else
-      opts << "--enable-gui=no"
-      opts << "--without-x"
     end
 
     # XXX: Please do not submit a pull request that hardcodes the path
@@ -80,37 +79,48 @@ class Vim74 < Formula
                           "--enable-fail-if-missing",
                           *opts
 
-    # Replace `Cellar' paths by `opt_prefix' paths in config.mk
+    # Replace `Cellar' paths by `Homebrew/opt' paths in config.mk
     inreplace "src/auto/config.mk" do |s|
-      s.gsub! %r|#{HOMEBREW_CELLAR}/(.+?)/(?:.+?)/|, "#{HOMEBREW_PREFIX}/opt/\\1/"
+      s.gsub! %r{#{HOMEBREW_CELLAR}/(.+?)/(?:.+?)/}, "#{HOMEBREW_PREFIX}/opt/\\1/"
 
       # Require Python's dynamic library, and needs to be built as a framework.
       # Help vim find Python's dynamic library as absolute path.
       if build.with? "python"
         s.gsub! /-DDYNAMIC_PYTHON_DLL=\\".*?\\"/,
-          %(-DDYNAMIC_PYTHON_DLL=\'\"#{python_framework_path("python")}/Python\"\')
+          %(-DDYNAMIC_PYTHON_DLL=\'\"#{python_framework_path(2)}/Python\"\')
       end
       if build.with? "python3"
         s.gsub! /-DDYNAMIC_PYTHON3_DLL=\\".*?\\"/,
-          %(-DDYNAMIC_PYTHON3_DLL=\'\"#{python_framework_path("python3")}/Python\"\')
+          %(-DDYNAMIC_PYTHON3_DLL=\'\"#{python_framework_path(3)}/Python\"\')
       end
 
       true
     end
 
     system "make"
-    # If stripping the binaries is not enabled, vim will segfault with
+    # If stripping the binaries is enabled, vim will segfault with
     # statically-linked interpreters like ruby
     # http://code.google.com/p/vim/issues/detail?id=114&thanks=114&ts=1361483471
     system "make", "install", "prefix=#{prefix}", "STRIP=true"
   end
 
-  def python_framework_path(pyexe)
-    `#{pyexe} -c "import sys; print(sys.prefix)"`.chomp.
-      gsub(%r|#{HOMEBREW_CELLAR}/(?:.+?)/(?:.+?)/|, "#{HOMEBREW_PREFIX}/")
+  def python_framework_path(v = nil)
+    `python#{v}-config --exec-prefix`.chomp.gsub(%r{#{HOMEBREW_CELLAR}/(?:.+?)/(?:.+?)/}, "#{HOMEBREW_PREFIX}/")
   end
 
   test do
+    # Simple test to check if Vim was linked to Python version in $PATH
+    # if build.with? "python"
+    #   vim_path = bin/"vim"
     #
+    #   # Get linked framework using otool
+    #   otool_output = `otool -L #{vim_path} | grep -m 1 Python`.gsub(/\(.*\)/, "").strip.chomp
+    #
+    #   # Expand the link and get the python exec path
+    #   vim_framework_path = Pathname.new(otool_output).realpath.dirname.to_s.chomp
+    #   system_framework_path = `python-config --exec-prefix`.chomp
+    #
+    #   assert_equal system_framework_path, vim_framework_path
+    # end
   end
 end
