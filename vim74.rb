@@ -25,9 +25,10 @@ class Vim74 < Formula
     option "without-#{language}", "Build vim without #{language} support"
   end
 
-  depends_on :python => :recommended
-  depends_on :python3 => :optional
-  depends_on "lua" => :optional
+  depends_on "python" => :recommended
+  depends_on "python3" => :optional
+  depends_on "ruby" => :optional
+  depends_on "lua" => :recommended
   depends_on "luajit" => :optional
   depends_on :x11 if build.with? "client-server"
 
@@ -44,7 +45,7 @@ class Vim74 < Formula
     opts = []
 
     (LANGUAGES_OPTIONAL + LANGUAGES_DEFAULT).each do |language|
-      opts << "--enable-#{language}interp" if build.with? language
+      opts << "--enable-#{language}interp=dynamic" if build.with? language
     end
 
     opts << "--disable-nls" if build.without? "nls"
@@ -93,8 +94,6 @@ class Vim74 < Formula
         s.gsub! /-DDYNAMIC_PYTHON3_DLL=\\".*?\\"/,
           %(-DDYNAMIC_PYTHON3_DLL=\'\"#{python_framework_path(3)}/Python\"\')
       end
-
-      true
     end
 
     system "make"
