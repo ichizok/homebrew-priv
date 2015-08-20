@@ -4,7 +4,7 @@ class Vim74 < Formula
   # Get stable versions from hg repo instead of downloading an increasing
   # number of separate patches.
   patchlevel = 827
-  url "https://github.com/vim/vim", :tag => format("v7.4.%03d", patchlevel)
+  url "https://github.com/vim/vim.git", :tag => format("v7.4.%03d", patchlevel)
   version "7.4.#{patchlevel}"
 
   # We only have special support for finding depends_on :python, but not yet for
