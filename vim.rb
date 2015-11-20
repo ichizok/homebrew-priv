@@ -1,4 +1,4 @@
-class Vim74 < Formula
+class Vim < Formula
   desc "Vi \"workalike\" with many additional features"
   homepage "http://www.vim.org/"
   # Get stable versions from hg repo instead of downloading an increasing
