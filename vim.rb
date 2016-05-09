@@ -39,7 +39,7 @@ class Vim < Formula
   if build.with? "clpum"
     patch do
       url "https://github.com/vim/vim/compare/master...h-east:clpum.diff"
-      sha256 "3c43cfb14e4d317cf001d3f702569c8a8faddc45b46fbd81a914dddb37beb16b"
+      sha256 "3a967ae4fe7f2278cda9bafc81eb16cc6f7b992b201c083ea4d0826541bfea60"
     end
   end
 
