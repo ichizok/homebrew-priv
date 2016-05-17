@@ -3,7 +3,7 @@ class Vim < Formula
   homepage "http://www.vim.org/"
   # Get stable versions from hg repo instead of downloading an increasing
   # number of separate patches.
-  patchlevel = 1825
+  patchlevel = 1831
   url "https://github.com/vim/vim.git", :tag => format("v7.4.%03d", patchlevel)
   version "7.4.#{patchlevel}"
 
@@ -39,7 +39,7 @@ class Vim < Formula
   if build.with? "clpum"
     patch do
       url "https://github.com/vim/vim/compare/master...h-east:clpum.diff"
-      sha256 "3a967ae4fe7f2278cda9bafc81eb16cc6f7b992b201c083ea4d0826541bfea60"
+      sha256 "6d90ccba1e59b918c7e0c3b9440d8597861b9bb5f6c8a8f7442ddd86cebeefff"
     end
   end
 
