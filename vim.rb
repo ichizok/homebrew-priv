@@ -3,7 +3,7 @@ class Vim < Formula
   homepage "http://www.vim.org/"
   # Get stable versions from hg repo instead of downloading an increasing
   # number of separate patches.
-  patchlevel = 1832
+  patchlevel = 1862
   url "https://github.com/vim/vim.git", :tag => format("v7.4.%03d", patchlevel)
   version "7.4.#{patchlevel}"
 
@@ -14,7 +14,7 @@ class Vim < Formula
 
   option "without-nls", "Build vim without National Language Support (translated messages, keymaps)"
   option "with-client-server", "Enable client/server mode"
-  option "with-clpum", "Build Vim with CLPUM option (http://h-east.github.io/vim)"
+  option "with-clpum", "Build vim with CLPUM option (http://h-east.github.io/vim)"
 
   LANGUAGES_OPTIONAL = %w[mzscheme perl python3 ruby tcl]
   LANGUAGES_DEFAULT  = %w[lua python]
@@ -39,7 +39,7 @@ class Vim < Formula
   if build.with? "clpum"
     patch do
       url "https://github.com/vim/vim/compare/master...h-east:clpum.diff"
-      sha256 "6fefbf3e7ccd5e410643797cb86cd71db2a55178d191ef39e637eca7c1427d2a"
+      sha256 "7d4e883a687afd741d0f5f635617ab82212b6965e6acc0af0c220616c4b1c0ac"
     end
   end
 
