@@ -1,7 +1,7 @@
 class GasPreprocessor < ScriptFileFormula
   homepage "https://github.com/yuvi/gas-preprocessor"
   url "https://raw.github.com/yuvi/gas-preprocessor/master/gas-preprocessor.pl"
-  sha1 "bbf75d3c9e9872be5b92e638820f8bd8154a7fe3"
+  sha256 "554b8860ca85f90a6c268a709790ebfc37a16aa99ee235aca5cb95deed8275b3"
   version "0.1"
 
   test do
