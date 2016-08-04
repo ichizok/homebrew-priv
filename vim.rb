@@ -3,7 +3,7 @@ class Vim < Formula
   homepage "http://www.vim.org/"
   # Get stable versions from hg repo instead of downloading an increasing
   # number of separate patches.
-  patchlevel = 2136
+  patchlevel = 2152
   url "https://github.com/vim/vim.git", :tag => format("v7.4.%03d", patchlevel)
   version "7.4.#{patchlevel}"
 
@@ -16,8 +16,8 @@ class Vim < Formula
   option "with-client-server", "Enable client/server mode"
   option "with-clpum", "Build vim with CLPUM option (http://h-east.github.io/vim)"
 
-  LANGUAGES_OPTIONAL = %w[mzscheme perl python3 ruby tcl]
-  LANGUAGES_DEFAULT  = %w[lua python]
+  LANGUAGES_OPTIONAL = %w[mzscheme perl python python3 ruby tcl]
+  LANGUAGES_DEFAULT  = %w[lua]
 
   LANGUAGES_OPTIONAL.each do |language|
     option "with-#{language}", "Build vim with #{language} support"
@@ -26,7 +26,8 @@ class Vim < Formula
     option "without-#{language}", "Build vim without #{language} support"
   end
 
-  depends_on "python" => :recommended
+  depends_on "perl" => :optional
+  depends_on "python" => :optional
   depends_on "python3" => :optional
   depends_on "ruby" => :optional
   depends_on "lua" => :recommended
@@ -38,17 +39,25 @@ class Vim < Formula
 
   if build.with? "clpum"
     patch do
-      url "https://github.com/vim/vim/compare/master...h-east:clpum.diff"
-      sha256 "1727a92b9c6a45f2d16df1d46b37fee6b5c4c4241b276a7430df2713c8d1ee0f"
+      url "https://github.com/vim/vim/compare/v#{version}...h-east:clpum.diff"
+      sha256 "884e653652d71f5524b35c0fa2fba61090755e1ffd237548c3ef2ee098f7899b"
     end
   end
 
   def install
+    # https://github.com/Homebrew/homebrew-core/pull/1046
+    ENV.delete("SDKROOT")
     ENV["LUA_PREFIX"] = HOMEBREW_PREFIX if build.with?("lua") || build.with?("luajit")
     ENV.append_to_cflags "-mtune=native"
 
     # vim doesn't require any Python package, unset PYTHONPATH.
     ENV.delete("PYTHONPATH")
+
+    if build.with?("python") && which("python").to_s == "/usr/bin/python" && !MacOS::CLT.installed?
+      # break -syslibpath jail
+      ln_s "/System/Library/Frameworks", buildpath
+      ENV.append "LDFLAGS", "-F#{buildpath}/Frameworks"
+    end
 
     opts = []
 
@@ -66,25 +75,23 @@ class Vim < Formula
     end
 
     if build.with? "luajit"
-      opts << "--enable-luainterp=dynamic" if build.without? "lua"
       opts << "--with-luajit"
+      opts << "--enable-luainterp=dynamic" if build.without? "lua"
     end
-
-    # XXX: Please do not submit a pull request that hardcodes the path
-    # to ruby: vim can be compiled against 1.8.x or 1.9.3-p385 and up.
-    # If you have problems with vim because of ruby, ensure a compatible
-    # version is first in your PATH when building vim.
 
     # We specify HOMEBREW_PREFIX as the prefix to make vim look in the
     # the right place (HOMEBREW_PREFIX/share/vim/{vimrc,vimfiles}) for
     # system vimscript files. We specify the normal installation prefix
     # when calling "make install".
+    # Homebrew will use the first suitable Perl & Ruby in your PATH if you
+    # build from source. Please don't attempt to hardcode either.
     system "./configure", "--prefix=#{HOMEBREW_PREFIX}",
                           "--mandir=#{man}",
                           "--enable-multibyte",
                           "--with-tlib=ncurses",
-                          "--with-features=huge",
+                          "--enable-cscope",
                           "--with-compiledby=Homebrew",
+                          "--with-features=huge",
                           "--enable-fail-if-missing",
                           *opts
 
@@ -107,7 +114,7 @@ class Vim < Formula
     system "make"
     # If stripping the binaries is enabled, vim will segfault with
     # statically-linked interpreters like ruby
-    # http://code.google.com/p/vim/issues/detail?id=114&thanks=114&ts=1361483471
+    # https://github.com/vim/vim/issues/114
     system "make", "install", "prefix=#{prefix}", "STRIP=true"
   end
 
