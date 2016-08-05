@@ -3,9 +3,8 @@ class Vim < Formula
   homepage "http://www.vim.org/"
   # Get stable versions from hg repo instead of downloading an increasing
   # number of separate patches.
-  patchlevel = 2153
-  tagname = format("v7.4.%03d", patchlevel)
-  url "https://github.com/vim/vim.git", :tag => tagname
+  patchlevel = 2156
+  url "https://github.com/vim/vim.git", :tag => format("v7.4.%03d", patchlevel)
   version "7.4.#{patchlevel}"
 
   # We only have special support for finding depends_on :python, but not yet for
@@ -40,8 +39,8 @@ class Vim < Formula
 
   if build.with? "clpum"
     patch do
-      url "https://github.com/vim/vim/compare/#{tagname}...h-east:clpum.diff"
-      sha256 "884e653652d71f5524b35c0fa2fba61090755e1ffd237548c3ef2ee098f7899b"
+      url "https://github.com/vim/vim/compare/master...h-east:clpum.diff"
+      sha256 "30a446338cfa2b088ddf47cfd0039d180d9a2730ee155da951b9f5e15c988303"
     end
   end
 
