@@ -1,6 +1,7 @@
 class GitGuilt < Formula
   desc "Quilt on top of git"
   homepage "http://repo.or.cz/guilt.git"
+  revision 1
 
   stable do
     url "http://repo.or.cz/guilt.git", :tag => "v0.36"
@@ -27,11 +28,29 @@ class GitGuilt < Formula
   end
 
   test do
-    #system "make", "-C", "regression"
+    # system "make", "-C", "regression"
   end
 end
 
 __END__
+diff --git a/guilt b/guilt
+--- a/guilt
++++ b/guilt
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ #
+ # Copyright (c) Josef "Jeff" Sipek, 2006-2015
+ #
+@@ -25,7 +25,7 @@ esac
+ # we change directories ourselves
+ SUBDIRECTORY_OK=1
+ 
+-. "$(git --exec-path)/git-sh-setup"
++. "$(git --exec-path)/git-sh-setup" 2>/dev/null
+ 
+ #
+ # Shell library
 diff --git a/guilt-help b/guilt-help
 --- a/guilt-help
 +++ b/guilt-help
