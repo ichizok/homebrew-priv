@@ -3,9 +3,9 @@ class Vim < Formula
   homepage "http://www.vim.org/"
   # Get stable versions from hg repo instead of downloading an increasing
   # number of separate patches.
-  patchlevel = 2364
-  url "https://github.com/vim/vim.git", :tag => format("v7.4.%03d", patchlevel)
-  version "7.4.#{patchlevel}"
+  patchlevel = 3
+  url "https://github.com/vim/vim.git", :tag => format("v8.0.%04d", patchlevel)
+  version "8.0.#{patchlevel}"
 
   # We only have special support for finding depends_on :python, but not yet for
   # :ruby, :perl etc., so we use the standard environment that leaves the
@@ -16,8 +16,8 @@ class Vim < Formula
   option "with-client-server", "Enable client/server mode"
   option "with-clpum", "Build vim with CLPUM option (http://h-east.github.io/vim)"
 
-  LANGUAGES_OPTIONAL = %w[mzscheme perl python python3 ruby tcl]
-  LANGUAGES_DEFAULT  = %w[lua]
+  LANGUAGES_OPTIONAL = %w[mzscheme perl python python3 ruby tcl].freeze
+  LANGUAGES_DEFAULT  = %w[lua].freeze
 
   LANGUAGES_OPTIONAL.each do |language|
     option "with-#{language}", "Build vim with #{language} support"
@@ -40,7 +40,7 @@ class Vim < Formula
   if build.with? "clpum"
     patch do
       url "https://github.com/vim/vim/compare/master...h-east:clpum.diff"
-      sha256 "c3151de8076755ef4095d20b8161e372b1dba79a677b740dba0da555289bdf7a"
+      # omit sha256
     end
   end
 
