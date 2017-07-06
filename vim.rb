@@ -3,7 +3,7 @@ class Vim < Formula
   homepage "http://www.vim.org/"
   # Get stable versions from hg repo instead of downloading an increasing
   # number of separate patches.
-  patchlevel = 679
+  patchlevel = 692
   url "https://github.com/vim/vim.git", :tag => format("v8.0.%04d", patchlevel)
   version "8.0.#{patchlevel}"
 
