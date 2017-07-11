@@ -1,7 +1,7 @@
 class Vim < Formula
   desc "Vi \"workalike\" with many additional features"
   homepage "http://www.vim.org/"
-  patchlevel = 692
+  patchlevel = 705
   url "https://github.com/vim/vim.git", :tag => format("v8.0.%04d", patchlevel)
   version "8.0.#{patchlevel}"
 
@@ -9,6 +9,7 @@ class Vim < Formula
   option "with-client-server", "Enable client/server mode"
   option "with-clpum", "Build vim with CLPUM option (http://h-east.github.io/vim)"
   option "with-python3", "Build vim with python3 instead of python[2] support"
+  option "with-terminal", "Enable terminal-window support"
 
   LANGUAGES_OPTIONAL = %w[perl python ruby tcl].freeze
   LANGUAGES_DEFAULT  = %w[lua python3].freeze
@@ -88,6 +89,8 @@ class Vim < Formula
         opts << "--with-luajit"
       end
     end
+
+    opts << "--enable-terminal" if build.with? "terminal"
 
     # We specify HOMEBREW_PREFIX as the prefix to make vim look in the
     # the right place (HOMEBREW_PREFIX/share/vim/{vimrc,vimfiles}) for
