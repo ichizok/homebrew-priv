@@ -1,7 +1,7 @@
 class Vim < Formula
   desc "Vi \"workalike\" with many additional features"
   homepage "http://www.vim.org/"
-  patchlevel = 994
+  patchlevel = 1008
   url "https://github.com/vim/vim.git", :tag => format("v8.0.%04d", patchlevel)
   version "8.0.#{patchlevel}"
 
