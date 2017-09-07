@@ -1,9 +1,8 @@
 class Vim < Formula
   desc "Vi \"workalike\" with many additional features"
-  homepage "http://www.vim.org/"
-  patchlevel = 1026
+  homepage "https://vim.sourceforge.io"
+  patchlevel = 1067
   url "https://github.com/vim/vim.git", :tag => format("v8.0.%04d", patchlevel)
-  version "8.0.#{patchlevel}"
 
   option "with-gettext", "Build vim with National Language Support (translated messages, keymaps)"
   option "with-client-server", "Enable client/server mode"
@@ -100,7 +99,6 @@ class Vim < Formula
                           "--enable-multibyte",
                           "--with-tlib=ncurses",
                           "--enable-cscope",
-                          "--enable-terminal",
                           "--with-compiledby=Homebrew",
                           "--with-features=huge",
                           "--enable-fail-if-missing",
