@@ -1,9 +1,10 @@
 class Vim < Formula
-  desc "Vi \"workalike\" with many additional features"
+  desc "Vi 'workalike' with many additional features"
   homepage "https://vim.sourceforge.io"
   patchlevel = 1428
   url "https://github.com/vim/vim.git", :tag => format("v8.0.%04d", patchlevel)
 
+  option "with-override-system-vi", "Override system vi"
   option "with-gettext", "Build vim with National Language Support (translated messages, keymaps)"
   option "with-client-server", "Enable client/server mode"
   option "with-clpum", "Build vim with CLPUM option (http://h-east.github.io/vim)"
@@ -12,12 +13,6 @@ class Vim < Formula
   LANGUAGES_OPTIONAL = %w[perl python ruby tcl].freeze
   LANGUAGES_DEFAULT  = %w[lua python3].freeze
 
-  if MacOS.version >= :mavericks
-    option "with-custom-python", "Build with a custom Python 2 instead of the Homebrew version."
-    option "with-custom-ruby", "Build with a custom Ruby instead of the Homebrew version."
-    option "with-custom-perl", "Build with a custom Perl instead of the Homebrew version."
-  end
-
   LANGUAGES_OPTIONAL.each do |language|
     option "with-#{language}", "Build vim with #{language} support"
   end
@@ -25,14 +20,14 @@ class Vim < Formula
     option "without-#{language}", "Build vim without #{language} support"
   end
 
-  depends_on :python => :optional
-  depends_on :python3 => :recommended
-  depends_on :ruby => "1.8" # Can be compiled against 1.8.x or >= 1.9.3-p385.
-  depends_on :perl => "5.3"
   depends_on "lua" => :recommended
   depends_on "luajit" => :optional
-  depends_on :x11 if build.with? "client-server"
+  depends_on "perl" => :optional
+  depends_on "python" => :optional
+  depends_on "python3" => :recommended
+  depends_on "ruby" => :optional
   depends_on "gettext" => :optional
+  depends_on :x11 if build.with? "client-server"
 
   conflicts_with "ex-vi",
     :because => "vim and ex-vi both install bin/ex and bin/view"
@@ -128,6 +123,7 @@ class Vim < Formula
     # statically-linked interpreters like ruby
     # https://github.com/vim/vim/issues/114
     system "make", "install", "prefix=#{prefix}", "STRIP=#{which "true"}"
+    bin.install_symlink "vim" => "vi" if build.with? "override-system-vi"
   end
 
   def python_framework_path(v = nil)
