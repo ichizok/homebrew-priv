@@ -1,7 +1,7 @@
 class Vim < Formula
   desc "Vi 'workalike' with many additional features"
   homepage "https://vim.sourceforge.io"
-  patchlevel = 1451
+  patchlevel = 1476
   url "https://github.com/vim/vim.git", :tag => format("v8.0.%04d", patchlevel)
 
   option "with-override-system-vi", "Override system vi"
