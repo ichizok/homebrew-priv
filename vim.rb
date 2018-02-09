@@ -8,7 +8,6 @@ class Vim < Formula
   option "with-gettext", "Build vim with National Language Support (translated messages, keymaps)"
   option "with-client-server", "Enable client/server mode"
   option "with-clpum", "Build vim with CLPUM option (http://h-east.github.io/vim)"
-  option "with-python3", "Build vim with python3 instead of python[2] support"
 
   LANGUAGES_OPTIONAL = %w[perl python ruby tcl].freeze
   LANGUAGES_DEFAULT  = %w[lua python3].freeze
