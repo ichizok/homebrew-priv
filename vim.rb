@@ -1,8 +1,9 @@
 class Vim < Formula
   desc "Vi 'workalike' with many additional features"
   homepage "https://www.vim.org"
-  patchlevel = 1573
+  patchlevel = 1587
   url "https://github.com/vim/vim.git", :tag => format("v8.0.%04d", patchlevel)
+  head "https://github.com/vim/vim.git"
 
   option "with-override-system-vi", "Override system vi"
   option "with-gettext", "Build vim with National Language Support (translated messages, keymaps)"
