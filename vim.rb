@@ -132,8 +132,8 @@ class Vim < Formula
     bin.install_symlink "vim" => "vi" if build.with? "override-system-vi"
   end
 
-  def python_framework_path(v = nil)
-    `python#{v}-config --exec-prefix`.chomp.gsub(%r{#{HOMEBREW_CELLAR}/(?:.+?)/(?:.+?)/}, "#{HOMEBREW_PREFIX}/")
+  def python_framework_path(ver = nil)
+    `python#{ver}-config --exec-prefix`.chomp.gsub(%r{#{HOMEBREW_CELLAR}/(?:.+?)/(?:.+?)/}, "#{HOMEBREW_PREFIX}/")
   end
 
   test do
