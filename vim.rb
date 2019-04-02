@@ -45,7 +45,7 @@ class Vim < Formula
                           "--without-x",
                           "--enable-luainterp",
                           "--with-luajit",
-                          "--with-lua-prefix=#{Formula["lua"].opt_prefix}",
+                          "--with-lua-prefix=#{Formula["luajit"].opt_prefix}",
                           "--enable-perlinterp",
                           "--enable-python3interp",
                           "--enable-rubyinterp",
