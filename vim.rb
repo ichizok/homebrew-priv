@@ -1,7 +1,7 @@
 class Vim < Formula
   desc "Vi 'workalike' with many additional features"
   homepage "https://www.vim.org/"
-  patchlevel = 534
+  patchlevel = 539
   url "https://github.com/vim/vim.git", :tag => format("v8.2.%04d", patchlevel)
   head "https://github.com/vim/vim.git"
 
@@ -43,12 +43,12 @@ class Vim < Formula
                           "--disable-nls",
                           "--enable-gui=no",
                           "--without-x",
-                          "--enable-luainterp",
+                          "--enable-luainterp=dynamic",
                           "--with-luajit",
                           "--with-lua-prefix=#{Formula["luajit"].opt_prefix}",
-                          "--enable-perlinterp",
-                          "--enable-python3interp",
-                          "--enable-rubyinterp",
+                          "--enable-perlinterp=dynamic",
+                          "--enable-python3interp=dynamic",
+                          "--enable-rubyinterp=dynamic",
                           "--enable-fail-if-missing"
 
     system "make"
