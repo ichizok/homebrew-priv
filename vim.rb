@@ -1,7 +1,7 @@
 class Vim < Formula
   desc "Vi 'workalike' with many additional features"
   homepage "https://www.vim.org/"
-  patchlevel = 2389
+  patchlevel = 2411
   url "https://github.com/vim/vim.git", :tag => format("v8.2.%04d", patchlevel)
   head "https://github.com/vim/vim.git"
 
@@ -11,10 +11,10 @@ class Vim < Formula
   depends_on "ruby"
 
   conflicts_with "ex-vi",
-    :because => "vim and ex-vi both install bin/ex and bin/view"
+    because: "vim and ex-vi both install bin/ex and bin/view"
 
   conflicts_with "macvim",
-    :because => "vim and macvim both install vi* binaries"
+    because: "vim and macvim both install vi* binaries"
 
   def install
     ENV.prepend_path "PATH", Formula["python"].opt_libexec/"bin"
@@ -24,8 +24,6 @@ class Vim < Formula
 
     # vim doesn't require any Python package, unset PYTHONPATH.
     ENV.delete("PYTHONPATH")
-
-    ENV.append_to_cflags "-mtune=native"
 
     # We specify HOMEBREW_PREFIX as the prefix to make vim look in the
     # the right place (HOMEBREW_PREFIX/share/vim/{vimrc,vimfiles}) for
