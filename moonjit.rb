@@ -15,6 +15,8 @@ class Moonjit < Formula
     patch :DATA
   end
 
+  conflicts_with "luajit", because: "both install an `luajit` binaries"
+
   def install
     # Per https://luajit.org/install.html: If MACOSX_DEPLOYMENT_TARGET
     # is not set then it's forced to 10.4, which breaks compile on Mojave.
