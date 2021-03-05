@@ -1,11 +1,11 @@
 class Vim < Formula
   desc "Vi 'workalike' with many additional features"
   homepage "https://www.vim.org/"
-  patchlevel = 2557
+  patchlevel = 2572
   url "https://github.com/vim/vim.git", :tag => format("v8.2.%04d", patchlevel)
   head "https://github.com/vim/vim.git"
 
-  depends_on "moonjit"
+  depends_on "luajit@2.1"
   depends_on "perl"
   depends_on "python"
   depends_on "ruby"
@@ -43,7 +43,7 @@ class Vim < Formula
                           "--without-x",
                           "--enable-luainterp=dynamic",
                           "--with-luajit",
-                          "--with-lua-prefix=#{Formula["moonjit"].opt_prefix}",
+                          "--with-lua-prefix=#{Formula["luajit@2.1"].opt_prefix}",
                           "--enable-perlinterp=dynamic",
                           "--enable-python3interp=dynamic",
                           "--enable-rubyinterp=dynamic",
