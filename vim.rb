@@ -1,13 +1,13 @@
 class Vim < Formula
   desc "Vi 'workalike' with many additional features"
   homepage "https://www.vim.org/"
-  patchlevel = 3908
+  patchlevel = 3930
   url "https://github.com/vim/vim.git", :tag => format("v8.2.%04d", patchlevel)
   head "https://github.com/vim/vim.git"
 
   depends_on "luajit@2.1"
   depends_on "perl"
-  depends_on "python"
+  depends_on "python@3.10"
   depends_on "ruby"
 
   conflicts_with "ex-vi",
