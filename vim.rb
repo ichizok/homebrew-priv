@@ -1,8 +1,7 @@
 class Vim < Formula
   desc "Vi 'workalike' with many additional features"
   homepage "https://www.vim.org/"
-  patchlevel = 4198
-  url "https://github.com/vim/vim.git", :tag => format("v8.2.%04d", patchlevel)
+  url "https://github.com/vim/vim.git", :tag => "v8.2.4212"
   head "https://github.com/vim/vim.git"
 
   depends_on "luajit@2.1"
@@ -17,7 +16,7 @@ class Vim < Formula
     because: "vim and macvim both install vi* binaries"
 
   def install
-    ENV.prepend_path "PATH", Formula["python"].opt_libexec/"bin"
+    ENV.prepend_path "PATH", Formula["python@3.10"].opt_libexec/"bin"
 
     # https://github.com/Homebrew/homebrew-core/pull/1046
     ENV.delete("SDKROOT")
@@ -35,7 +34,6 @@ class Vim < Formula
                           "--mandir=#{man}",
                           "--enable-multibyte",
                           "--with-tlib=ncurses",
-                          "--enable-cscope",
                           "--with-compiledby=Homebrew",
                           "--with-features=huge",
                           "--disable-nls",
