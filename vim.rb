@@ -1,10 +1,10 @@
 class Vim < Formula
   desc "Vi 'workalike' with many additional features"
   homepage "https://www.vim.org/"
-  url "https://github.com/vim/vim.git", :tag => "v9.0.0598"
+  url "https://github.com/vim/vim.git", :tag => "v9.0.0612"
   head "https://github.com/vim/vim.git"
 
-  depends_on "luajit@2.1"
+  depends_on "luajit"
   depends_on "perl"
   depends_on "python@3.10"
   depends_on "ruby"
@@ -41,7 +41,7 @@ class Vim < Formula
                           "--without-x",
                           "--enable-luainterp=dynamic",
                           "--with-luajit",
-                          "--with-lua-prefix=#{Formula["luajit@2.1"].opt_prefix}",
+                          "--with-lua-prefix=#{Formula["luajit"].opt_prefix}",
                           "--enable-perlinterp=dynamic",
                           "--enable-python3interp=dynamic",
                           "--enable-rubyinterp=dynamic",
