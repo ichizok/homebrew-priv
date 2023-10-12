@@ -4,7 +4,10 @@ class Vim < Formula
   url "https://github.com/vim/vim.git", :tag => "v9.0.2018"
   head "https://github.com/vim/vim.git"
 
+  depends_on "gettext"
+  depends_on "libsodium"
   depends_on "luajit"
+  depends_on "ncurses"
   depends_on "perl"
   depends_on "python"
   depends_on "ruby"
@@ -37,7 +40,7 @@ class Vim < Formula
                           "--with-compiledby=Homebrew",
                           "--with-features=huge",
                           "--disable-nls",
-                          "--enable-gui=no",
+                          "--disable-gui",
                           "--without-x",
                           "--enable-luainterp=dynamic",
                           "--with-luajit",
@@ -65,5 +68,7 @@ class Vim < Formula
     EOS
     system bin/"vim", "-T", "dumb", "-s", "commands.vim", "test.txt"
     assert_equal "hello python3", File.read("test.txt").chomp
+    assert_match "+gettext", shell_output("#{bin}/vim --version")
+    assert_match "+sodium", shell_output("#{bin}/vim --version")
   end
 end
