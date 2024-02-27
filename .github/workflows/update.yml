@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Fetch latest version
         id: latest-version
@@ -32,19 +32,19 @@ jobs:
               }
             }
 
+      - name: Set version
+        run: echo "latest_version=${{ fromJSON(steps.latest-version.outputs.data).vim.refs.edges[0].node.name }}" >> "$GITHUB_ENV"
+
       - name: Check version format
-        run: |
-          latest=${{ fromJSON(steps.latest-version.outputs.data).vim.refs.edges[0].node.name }}
-          [[ ${latest} =~ ^v[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$ ]]
+        run: '[[ ${latest_version} =~ ^v[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$ ]]'
 
       - name: Update formula
         run: |
-          latest=${{ fromJSON(steps.latest-version.outputs.data).vim.refs.edges[0].node.name }}
-          sed -i '/^  url /s/:tag => "v[^"]*"/:tag => "'"${latest}"'"/' vim.rb
+          sed -i '/^  url /s/:tag => "v[^"]*"/:tag => "'"${latest_version}"'"/' vim.rb
           if ! git diff --exit-code vim.rb; then
             git config --local user.name 'github-actions[bot]'
             git config --local user.email 'github-actions[bot]@users.noreply.github.com'
             git add vim.rb
-            git commit -m "vim: ${latest#v}"
+            git commit -m "vim: ${latest_version#v}"
             git push -u origin master
           fi
