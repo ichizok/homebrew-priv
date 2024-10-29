@@ -1,7 +1,7 @@
 class Vim < Formula
   desc "Vi 'workalike' with many additional features"
   homepage "https://www.vim.org/"
-  url "https://github.com/vim/vim.git", :tag => "v9.1.0818"
+  url "https://github.com/vim/vim.git", :tag => "v9.1.0821"
   head "https://github.com/vim/vim.git"
 
   depends_on "gettext"
