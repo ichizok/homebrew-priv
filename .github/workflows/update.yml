@@ -40,11 +40,11 @@ jobs:
 
       - name: Update formula
         run: |
-          sed -i '/^  url /s/:tag => "v[^"]*"/:tag => "'"${latest_version}"'"/' vim.rb
-          if ! git diff --exit-code vim.rb; then
+          sed -i '/^  url /s/:tag => "v[^"]*"/:tag => "'"${latest_version}"'"/' Formula/vim.rb
+          if ! git diff --exit-code Formula/vim.rb; then
             git config --local user.name 'github-actions[bot]'
             git config --local user.email 'github-actions[bot]@users.noreply.github.com'
-            git add vim.rb
+            git add Formula/vim.rb
             git commit -m "vim: ${latest_version#v}"
-            git push -u origin master
+            git push -u origin main
           fi
